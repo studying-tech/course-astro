@@ -1,0 +1,123 @@
+---
+type Props = { date: string; title: string }
+const { date, title } = Astro.props
+---
+
+<div class='timeline'>
+  <div class='timeline-item'>
+    <div class='timeline-date'>{date}</div>
+    <div class='timeline-content'>
+      <h4>{title}</h4>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--primary-color);
+  }
+
+  .timeline-item {
+    padding-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.35rem;
+    top: 0.5rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+  }
+
+  .timeline-date {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+  }
+
+  h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .timeline {
+      padding-left: 1.5rem;
+    }
+
+    .timeline-item::before {
+      left: -1.85rem;
+    }
+  }
+
+  /* フェードインアニメーション */
+  .timeline-item {
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+      opacity 0.7s ease-out,
+      transform 0.7s ease-out;
+  }
+
+  .timeline-item.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<style is:global>
+  .timeline-content p {
+    margin-bottom: 1rem;
+  }
+
+  .timeline-content ul {
+    margin-left: 1.5rem;
+    padding: 0;
+    list-style: disc;
+  }
+</style>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    // as NodeListOf<HTMLElement> で型を指定 (TypeScript)
+    const timelineItems = document.querySelectorAll('.timeline-item') as NodeListOf<HTMLElement>
+
+    // Intersection Observer を使用してフェードインアニメーションを実行
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // 要素が画面に入ったらフェードインアニメーションを実行
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in')
+            // この要素の監視を終了
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      // 要素が画面の 50% の位置に入ったらフェードインアニメーションを実行
+      { threshold: 0.5 }
+    )
+
+    // 各要素に対して Intersection Observer を設定
+    timelineItems.forEach((item) => {
+      observer.observe(item)
+    })
+  })
+</script>

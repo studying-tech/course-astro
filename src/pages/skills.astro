@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+import SkillContainer from '../components/skills/SkillContainer.astro'
+---
+
+<Layout title={`Skills - ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+  <main class='page-container'>
+    <h1 class='gradient-text page-title'>Skills</h1>
+
+    <p>
+      フロントエンド・サーバサイド・インフラの一通りをやっています。これら以外にも Rust や FastAPI
+      など、好きな言語やフレームワークがあります。
+    </p>
+
+    <SkillContainer />
+  </main>
+</Layout>
+
+<style>
+  p {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+  }
+</style>
