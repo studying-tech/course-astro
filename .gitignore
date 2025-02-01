@@ -1,4 +1,5 @@
 /node_modules
+.astro/
 
 # macOS
 .DS_Store
